@@ -65,7 +65,10 @@ function handleContributionsUpdate(req,res,next)
    //validate input before eval
    var regex = /^[0-9]+$/;
    if(!req.body.preTax.match(regex) || !req.body.afterTax.match(regex) || !req.body.roth.match(regex)){
-      alert("must input numbers");
+      return res.render("contributions", {
+         updateError: "Must input numbers",
+              userId: userId
+          });
    }
 
    // convert to numbers
