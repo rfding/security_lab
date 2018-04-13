@@ -29,16 +29,9 @@ function displayAllocations(req,res,next)
    
    var threshold = parseInt(req.query.threshold);
  
-   var q = 'SELECT * FROM Allocations WHERE userId = $1';
-
-   if (threshold) {
-       var thint = threshold*1;
-       if (thint >= 0 && thint <= 99) {
-           q += " AND stocks > " + thint;
-        }
-    }
+   var q = 'SELECT * FROM Allocations WHERE userId=$1 AND stocks>$2';
    
-   db.query(q, [userId] ,function(e1,d1) { displayAllocations1(req,res,next,e1,d1); } );
+   db.query(q, [userId, threshold] ,function(e1,d1) { displayAllocations1(req,res,next,e1,d1); } );
 }
 
 
