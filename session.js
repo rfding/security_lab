@@ -1,17 +1,17 @@
 /********************************************************************************/
-/*										*/
-/*		session.js							*/
-/*										*/
-/*	User management routines						*/
-/*										*/
+/*                    */
+/*    session.js              */
+/*                    */
+/*  User management routines            */
+/*                    */
 /********************************************************************************/
 
 
 
 /********************************************************************************/
-/*										*/
-/*	Imports 								*/
-/*										*/
+/*                    */
+/*  Imports                 */
+/*                    */
 /********************************************************************************/
 
 var db = require("./database.js");
@@ -19,16 +19,16 @@ var db = require("./database.js");
 
 
 /********************************************************************************/
-/*										*/
-/*	Handle Checking for admin login 					*/
-/*										*/
+/*                    */
+/*  Handle Checking for admin login           */
+/*                    */
 /********************************************************************************/
 
 function isAdminUserMiddleware(req,res,next)
 {
    if (req.session.userId) {
-      var q = 'SELECT * FROM User WHERE userId = $1';
-      db.query(q, [req.session.userId],function (e1,d1) { isAdminUserMiddleware1(req,res,next,e1,d1) } );
+      var q = "SELECT * FROM User WHERE userId = " + req.session.userId;
+      db.query(q,function (e1,d1) { isAdminUserMiddleware1(req,res,next,e1,d1) } );
     }
    else {
       console.log("redirecting to login");
@@ -51,9 +51,9 @@ function isAdminUserMiddleware1(req,res,next,err,data)
 
 
 /********************************************************************************/
-/*										*/
-/*	Handle checking for normal login					*/
-/*										*/
+/*                    */
+/*  Handle checking for normal login          */
+/*                    */
 /********************************************************************************/
 
 function isLoggedInMiddleware(req,res,next)
@@ -68,23 +68,23 @@ function isLoggedInMiddleware(req,res,next)
 
 
 /********************************************************************************/
-/*										*/
-/*	Display login page							*/
-/*										*/
+/*                    */
+/*  Display login page              */
+/*                    */
 /********************************************************************************/
 
 function displayLoginPage(req,res)
 {
    return res.render("login", { userName: "",
-				password: "",
-				loginError: "" });
+        password: "",
+        loginError: "" });
 }
 
 
 /********************************************************************************/
-/*										*/
-/*	Handle login request							*/
-/*										*/
+/*                    */
+/*  Handle login request              */
+/*                    */
 /********************************************************************************/
 
 function handleLoginRequest(req,res,next)
@@ -92,8 +92,8 @@ function handleLoginRequest(req,res,next)
    var username = req.body.userName;
    var password = req.body.password;
 
-   var q = "SELECT * FROM User U WHERE U.userName = '$1'";
-   db.query(q, [username],function (e1,d1) { handleLoginRequest1(req,res,next,e1,d1); } );
+   var q = "SELECT * FROM User U WHERE U.userName = '" + username + "'";
+   db.query(q,function (e1,d1) { handleLoginRequest1(req,res,next,e1,d1); } );
 }
 
 
@@ -110,15 +110,15 @@ function handleLoginRequest1(req,res,next,err,data)
    if (err) next(err);
    else if (data.rows.length != 1) {
       return res.render("login", { userName : username,
-				      password : "",
-				      loginError : invalidUserNameErrorMessage } );
+              password : "",
+              loginError : invalidUserNameErrorMessage } );
     }
    else {
       var userdata = data.rows[0];
       if (!comparePassword(password,userdata.password)) {
-	 return res.render("login", { userName : username,
-				      password : "",
-				      loginError : invalidPasswordErrorMessage } );
+   return res.render("login", { userName : username,
+              password : "",
+              loginError : invalidPasswordErrorMessage } );
        }
 
       req.session.userId = userdata.userId;
@@ -137,9 +137,9 @@ function comparePassword(fromdb,fromuser)
 
 
 /********************************************************************************/
-/*										*/
-/*	Handle Display logout page						*/
-/*										*/
+/*                    */
+/*  Handle Display logout page            */
+/*                    */
 /********************************************************************************/
 
 function displayLogoutPage(req,res)
@@ -157,30 +157,30 @@ function displayLogoutPage1(req,res)
 
 
 /********************************************************************************/
-/*										*/
-/*	Handle Display Signup Page						*/
-/*										*/
+/*                    */
+/*  Handle Display Signup Page            */
+/*                    */
 /********************************************************************************/
 
 function displaySignupPage(req,res)
 {
    res.render("signup", { userName: "",
-			  password: "",
-			  passwordError: "",
-			  email: "",
-			  userNameError: "",
-			  emailError: "",
-			  verifyError: ""
-	       });
+        password: "",
+        passwordError: "",
+        email: "",
+        userNameError: "",
+        emailError: "",
+        verifyError: ""
+         });
 }
 
 
 
 
 /********************************************************************************/
-/*										*/
-/*	Handle Validate Signup							*/
-/*										*/
+/*                    */
+/*  Handle Validate Signup              */
+/*                    */
 /********************************************************************************/
 
 function handleSignup(req,res,next)
@@ -199,8 +199,8 @@ function handleSignup(req,res,next)
     };
 
    if (validateSignup(userName, firstName, lastName, password, verify, email, errors)) {
-      var q = "SELECT * FROM User U WHERE U.userName = '$1'";
-      db.query(q, [userName],function (e1,d1) { handleSignup1(req,res,next,errors,e1,d1); });
+      var q = "SELECT * FROM User U WHERE U.userName = '" + userName + "'";
+      db.query(q,function (e1,d1) { handleSignup1(req,res,next,errors,e1,d1); });
     }
     else {
        console.log("user did not validate");
@@ -224,9 +224,10 @@ function handleSignup1(req,res,next,errors,err,data)
       return res.render("signup", errors);
     }
 
-    var q = "INSERT INTO User ( userName, firstName, lastName, password, email) " +
-      "VALUES ('$1','$2','$3','$4','$5')";
-   db.query(q, [userName,firstName,lastName,password,email],function(e1,d1) { handleSignup2(req,res,next,e1,d1); } );
+   var q = "INSERT INTO User ( userName, firstName, lastName, password, email) " +
+      "VALUES ( '" + userName + "','" + firstName + "','" + lastName + "','" +
+      password + "','" + email + "')";
+   db.query(q,function(e1,d1) { handleSignup2(req,res,next,e1,d1); } );
 }
 
 
@@ -237,8 +238,8 @@ function handleSignup2(req,res,next,err,data)
    
    var userName = req.body.userName;
    
-   var q = "SELECT * FROM User U WHERE U.userName = '$1'";
-   db.query(q, [userName],function (e1,d1) { handleSignup3(req,res,next,e1,d1); } );
+   var q = "SELECT * FROM User U WHERE U.userName = '" + userName + "'";
+   db.query(q,function (e1,d1) { handleSignup3(req,res,next,e1,d1); } );
 }
 
 
@@ -292,7 +293,7 @@ function validateSignup(username,firstname,lastname,password,verify,email,errors
     }
    if (!PASS_RE.test(password)) {
       errors.passwordError = "Password must be 8 to 18 characters" +
-	 " including numbers, lowercase and uppercase letters.";
+   " including numbers, lowercase and uppercase letters.";
       return false;
     }
    if (password !== verify) {
@@ -301,8 +302,8 @@ function validateSignup(username,firstname,lastname,password,verify,email,errors
     }
    if (email !== "") {
       if (!EMAIL_RE.test(email)) {
-	 errors.emailError = "Invalid email address";
-	 return false;
+   errors.emailError = "Invalid email address";
+   return false;
        }
     }
    return true;
@@ -311,9 +312,9 @@ function validateSignup(username,firstname,lastname,password,verify,email,errors
 
 
 /********************************************************************************/
-/*										*/
-/*	Setup a new user							*/
-/*										*/
+/*                    */
+/*  Setup a new user              */
+/*                    */
 /********************************************************************************/
 
 function prepareUserData(user,next)
@@ -322,8 +323,9 @@ function prepareUserData(user,next)
    var funds = Math.floor((Math.random() * 40) + 1);
    var bonds = 100 - (stocks + funds);
 
-   var q = 'INSERT INTO Allocations (userId,stocks,funds,bonds) VALUES ($1,$2,$3,$4)';
-   db.query(q, [user.userId,stocks,funds,bonds],function (e1,d1) { prepareUserData1(user,next,e1,d1); } );
+   var q = "INSERT INTO Allocations (userId,stocks,funds,bonds) VALUES ( " +
+      user.userId + "," + stocks + "," + funds + "," + bonds + ")";
+   db.query(q,function (e1,d1) { prepareUserData1(user,next,e1,d1); } );
 }
 
 
@@ -331,8 +333,8 @@ function prepareUserData1(user,next,err,data)
 {
    if (err != null) return next(err);
 
-   var q = 'INSERT INTO Profile (userid) VALUES ($1)';
-   db.query(q, [user.userId],function(e1,d1) { prepareUserData2(user,next,e1,d1); } );
+   var q = "INSERT INTO Profile (userid) VALUES ( " + user.userId + ")";
+   db.query(q,function(e1,d1) { prepareUserData2(user,next,e1,d1); } );
 }
 
 
@@ -340,8 +342,8 @@ function prepareUserData2(user,next,err,data)
 {
    if (err != null) return next(err);
 
-   var q = 'INSERT INTO Contributions (userid) VALUES ($1)';
-   db.query(q, [user.userId],function(e1,d1) { prepareUserData3(user,next,e1,d1); } );
+   var q = "INSERT INTO Contributions (userid) VALUES ( " + user.userId + ")";
+   db.query(q,function(e1,d1) { prepareUserData3(user,next,e1,d1); } );
 }
 
 
@@ -353,9 +355,9 @@ function prepareUserData3(user,next,err,data)
 
 
 /********************************************************************************/
-/*										*/
-/*	Handle Display welcome page						*/
-/*										*/
+/*                    */
+/*  Handle Display welcome page           */
+/*                    */
 /********************************************************************************/
 
 function displayWelcomePage(req,res,next)
@@ -387,9 +389,9 @@ function displayWelcomePage1(req,res,next,err,data)
 
 
 /********************************************************************************/
-/*										*/
-/*	Exports 								*/
-/*										*/
+/*                    */
+/*  Exports                 */
+/*                    */
 /********************************************************************************/
 
 exports.isAdminUserMiddlewarr = isAdminUserMiddleware;
