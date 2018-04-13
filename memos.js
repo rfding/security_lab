@@ -21,8 +21,8 @@ function addMemos(req,res,next)
 {
    var memo = req.body.memo;
 
-   var q = "INSERT INTO Memos(memo) VALUES ( '" + memo + "' )";
-   db.query(q,function(e1,d1) { addMemos1(req,res,next,e1,d1); });
+   var q = "INSERT INTO Memos(memo) VALUES ('$1')";
+   db.query(q, [memo],function(e1,d1) { addMemos1(req,res,next,e1,d1); });
 }
 
 
