@@ -92,8 +92,8 @@ function handleLoginRequest(req,res,next)
    var username = req.body.userName;
    var password = req.body.password;
 
-   var q = "SELECT * FROM User U WHERE U.userName = '" + username + "'";
-   db.query(q,function (e1,d1) { handleLoginRequest1(req,res,next,e1,d1); } );
+   var q = "SELECT * FROM User U WHERE U.userName = $1";
+   db.query(q,[username],function (e1,d1) { handleLoginRequest1(req,res,next,e1,d1); } );
 }
 
 
