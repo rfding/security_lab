@@ -81,7 +81,7 @@ function handleProfileUpdate(req,res,next)
 
    var userId = req.session.userId;
 
-   var q = "UPDATE User SET firstName = '$1', lastName = '$2'" +
+   var q = "UPDATE User SET firstName = $1, lastName = $2" +
       " WHERE userId = $3";
    db.query(q, [firstname, lastname, userId], function (e1,d1) { handleProfileUpdate1(req,res,next,e1,d1); } );
 }
@@ -98,7 +98,7 @@ function handleProfileUpdate1(req,res,next,err,data)
    var bankAcc = req.body.bankAcc;
    var bankRouting = req.body.bankRouting;
 
-   var q = "UPDATE Profile SET ssn = '$1', dob = '$2', address = '$3', bankAcc = '$4', bankRouting = '$5'" +
+   var q = "UPDATE Profile SET ssn = $1, dob = $2, address = $3, bankAcc = $4, bankRouting = $5" +
       " WHERE userId = $6";
 
    db.query(q, [ssn, dob, address, bankAcc, bankRouting, req.session.userId], function(e1,d1) { handleProfileUpdate2(req,res,next,e1,d1); } );
