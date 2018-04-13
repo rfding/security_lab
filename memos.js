@@ -8,7 +8,6 @@
 
 
 var db = require("./database.js");
-var sanitizeHtml = require('sanitize-html');
 
 
 
@@ -20,7 +19,9 @@ var sanitizeHtml = require('sanitize-html');
 
 function addMemos(req,res,next)
 {
-   var memo = sanitizeHtml(req.body.memo);
+   var memo = req.body.memo;
+   memo = memo.replace("<", "&lt;");
+   memo = memo.replace(">", "&gt;");
 
    var q = "INSERT INTO Memos(memo) VALUES ($1)";
    db.query(q, [memo],function(e1,d1) { addMemos1(req,res,next,e1,d1); });
