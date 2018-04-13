@@ -48,6 +48,7 @@ function displayAllocations1(req,res,next,err,data)
    if (err) return next(err);
 
    var doc = data.rows[0];
+   console.log(doc);
 
    return res.render("allocations",doc);
 }
