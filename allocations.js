@@ -19,7 +19,7 @@ var db = require("./database.js");
 
 /********************************************************************************/
 /*										*/
-/*	Hnadle displaying allocations						*/
+/*	Handle displaying allocations						*/
 /*										*/
 /********************************************************************************/
 
@@ -27,7 +27,7 @@ function displayAllocations(req,res,next)
 {
    var userId = req.params.userId;
    
-   var threshold = req.query.threshold;
+   var threshold = parseInt(req.query.threshold);
  
    var q = 'SELECT * FROM Allocations WHERE userId = $1';
 
@@ -38,7 +38,7 @@ function displayAllocations(req,res,next)
         }
     }
    
-   db.query(q, [userId],function(e1,d1) { displayAllocations1(req,res,next,e1,d1); } );
+   db.query(q, [userId] ,function(e1,d1) { displayAllocations1(req,res,next,e1,d1); } );
 }
 
 
