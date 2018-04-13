@@ -50,7 +50,7 @@ function displayAllocations1(req,res,next,err,data)
    var doc = data.rows[0];
 
    if (!doc) {
-     doc = { userId: req.params.userId, stocks: 0, funds: 0, bonds: 0};
+     doc = { userId: req.params.userId, stocks: "", funds: "", bonds: ""};
    }
 
    return res.render("allocations",doc);
