@@ -1,17 +1,17 @@
 /********************************************************************************/
-/*                    */
-/*    session.js              */
-/*                    */
-/*  User management routines            */
-/*                    */
+/*										*/
+/*		session.js							*/
+/*										*/
+/*	User management routines						*/
+/*										*/
 /********************************************************************************/
 
 
 
 /********************************************************************************/
-/*                    */
-/*  Imports                 */
-/*                    */
+/*										*/
+/*	Imports 								*/
+/*										*/
 /********************************************************************************/
 
 var db = require("./database.js");
@@ -19,9 +19,9 @@ var db = require("./database.js");
 
 
 /********************************************************************************/
-/*                    */
-/*  Handle Checking for admin login           */
-/*                    */
+/*										*/
+/*	Handle Checking for admin login 					*/
+/*										*/
 /********************************************************************************/
 
 function isAdminUserMiddleware(req,res,next)
@@ -51,9 +51,9 @@ function isAdminUserMiddleware1(req,res,next,err,data)
 
 
 /********************************************************************************/
-/*                    */
-/*  Handle checking for normal login          */
-/*                    */
+/*										*/
+/*	Handle checking for normal login					*/
+/*										*/
 /********************************************************************************/
 
 function isLoggedInMiddleware(req,res,next)
@@ -68,23 +68,23 @@ function isLoggedInMiddleware(req,res,next)
 
 
 /********************************************************************************/
-/*                    */
-/*  Display login page              */
-/*                    */
+/*										*/
+/*	Display login page							*/
+/*										*/
 /********************************************************************************/
 
 function displayLoginPage(req,res)
 {
    return res.render("login", { userName: "",
-        password: "",
-        loginError: "" });
+				password: "",
+				loginError: "" });
 }
 
 
 /********************************************************************************/
-/*                    */
-/*  Handle login request              */
-/*                    */
+/*										*/
+/*	Handle login request							*/
+/*										*/
 /********************************************************************************/
 
 function handleLoginRequest(req,res,next)
@@ -110,15 +110,15 @@ function handleLoginRequest1(req,res,next,err,data)
    if (err) next(err);
    else if (data.rows.length != 1) {
       return res.render("login", { userName : username,
-              password : "",
-              loginError : invalidUserNameErrorMessage } );
+				      password : "",
+				      loginError : invalidUserNameErrorMessage } );
     }
    else {
       var userdata = data.rows[0];
       if (!comparePassword(password,userdata.password)) {
-   return res.render("login", { userName : username,
-              password : "",
-              loginError : invalidPasswordErrorMessage } );
+	 return res.render("login", { userName : username,
+				      password : "",
+				      loginError : invalidPasswordErrorMessage } );
        }
 
       req.session.userId = userdata.userId;
@@ -137,9 +137,9 @@ function comparePassword(fromdb,fromuser)
 
 
 /********************************************************************************/
-/*                    */
-/*  Handle Display logout page            */
-/*                    */
+/*										*/
+/*	Handle Display logout page						*/
+/*										*/
 /********************************************************************************/
 
 function displayLogoutPage(req,res)
@@ -157,30 +157,30 @@ function displayLogoutPage1(req,res)
 
 
 /********************************************************************************/
-/*                    */
-/*  Handle Display Signup Page            */
-/*                    */
+/*										*/
+/*	Handle Display Signup Page						*/
+/*										*/
 /********************************************************************************/
 
 function displaySignupPage(req,res)
 {
    res.render("signup", { userName: "",
-        password: "",
-        passwordError: "",
-        email: "",
-        userNameError: "",
-        emailError: "",
-        verifyError: ""
-         });
+			  password: "",
+			  passwordError: "",
+			  email: "",
+			  userNameError: "",
+			  emailError: "",
+			  verifyError: ""
+	       });
 }
 
 
 
 
 /********************************************************************************/
-/*                    */
-/*  Handle Validate Signup              */
-/*                    */
+/*										*/
+/*	Handle Validate Signup							*/
+/*										*/
 /********************************************************************************/
 
 function handleSignup(req,res,next)
@@ -293,7 +293,7 @@ function validateSignup(username,firstname,lastname,password,verify,email,errors
     }
    if (!PASS_RE.test(password)) {
       errors.passwordError = "Password must be 8 to 18 characters" +
-   " including numbers, lowercase and uppercase letters.";
+	 " including numbers, lowercase and uppercase letters.";
       return false;
     }
    if (password !== verify) {
@@ -302,8 +302,8 @@ function validateSignup(username,firstname,lastname,password,verify,email,errors
     }
    if (email !== "") {
       if (!EMAIL_RE.test(email)) {
-   errors.emailError = "Invalid email address";
-   return false;
+	 errors.emailError = "Invalid email address";
+	 return false;
        }
     }
    return true;
@@ -312,9 +312,9 @@ function validateSignup(username,firstname,lastname,password,verify,email,errors
 
 
 /********************************************************************************/
-/*                    */
-/*  Setup a new user              */
-/*                    */
+/*										*/
+/*	Setup a new user							*/
+/*										*/
 /********************************************************************************/
 
 function prepareUserData(user,next)
@@ -355,9 +355,9 @@ function prepareUserData3(user,next,err,data)
 
 
 /********************************************************************************/
-/*                    */
-/*  Handle Display welcome page           */
-/*                    */
+/*										*/
+/*	Handle Display welcome page						*/
+/*										*/
 /********************************************************************************/
 
 function displayWelcomePage(req,res,next)
@@ -389,9 +389,9 @@ function displayWelcomePage1(req,res,next,err,data)
 
 
 /********************************************************************************/
-/*                    */
-/*  Exports                 */
-/*                    */
+/*										*/
+/*	Exports 								*/
+/*										*/
 /********************************************************************************/
 
 exports.isAdminUserMiddlewarr = isAdminUserMiddleware;
